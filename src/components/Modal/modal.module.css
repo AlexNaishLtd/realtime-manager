@@ -1,0 +1,8 @@
+.wrap {
+  @apply relative inline-block p-24 my-10 space-y-4 md:min-w-xs text-left align-middle transition-all transform rounded shadow-xl;
+  background-color: white;
+}
+
+.wrap[data-compact] {
+  @apply p-12;
+}
