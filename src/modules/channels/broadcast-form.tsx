@@ -9,19 +9,18 @@ import { Textarea } from '@/components/Form/textarea';
 
 type BroadcastFormPayload = Pick<RouterInputs['channels']['broadcast'], 'eventName' | 'eventData'>;
 type BroadcastFormProps = {
-  onSubmit: (val: BroadcastFormPayload) => void;
+  onSubmit: (val: BroadcastFormPayload) => Promise<void>;
 };
 
 export const BroadcastForm = ({ onSubmit }: BroadcastFormProps) => {
   const [error, setError] = useState<string>('');
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<BroadcastFormPayload>();
 
-  const submit = async (values: any) => {
+  const submit = async (values: BroadcastFormPayload) => {
     try {
       setError('');
       await onSubmit(values);

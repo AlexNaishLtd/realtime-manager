@@ -5,7 +5,6 @@ import SearchIcon from '@heroicons/react/24/outline/MagnifyingGlassIcon';
 import { Layout } from "@/layouts/Layout";
 import { useListPage } from "@/hooks/useListPage";
 import { trpc } from '@/utils/api';
-import { success } from "@/utils/toast";
 import { SideOverlay } from "@/components/SideOverlay";
 import { Alert } from "@/components/Alert";
 import { CreateAppForm } from "@/modules/apps/create-form";
@@ -17,21 +16,15 @@ export default function Home() {
   const searchFilter = useDebounced(actions.setSearch);
   const utils = trpc.useContext();
   const createApplication = trpc.apps.create.useMutation({
-    onSettled: () => {
-      utils.apps.getAll.invalidate();
+    onSettled: async () => {
+      await utils.apps.getAll.invalidate();
     }
   });
-  const { data, isLoading, error } = trpc.apps.getAll.useInfiniteQuery(
+  const { data, isLoading, error } = trpc.apps.getAll.useQuery(
     {
       limit: 20,
-      filter: state.search
-    },
-    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+    }
   );
-
-  const onCopy = async () => {
-    success('Value copied to clipboard');
-  };
 
   return (
     <Layout>
@@ -46,7 +39,7 @@ export default function Home() {
             <div className="relative w-56 text-slate-500">
               <input
                 className="transition duration-200 ease-in-out text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 w-56 pr-10" type="text" placeholder="Search..."
-                onChange={(ev) => searchFilter(ev.target.value)} />
+                onChange={(ev) => { searchFilter(ev.target.value) }} />
               <SearchIcon className="absolute inset-y-0 right-0 w-4 h-4 my-auto mr-3" />
             </div>
           </div>
@@ -57,7 +50,7 @@ export default function Home() {
             description={error?.message}
           />}
           <ApplicationsTable
-            items={data?.pages.flatMap((page) => page.items)}
+            items={data}
             loading={isLoading}
           />
         </div>

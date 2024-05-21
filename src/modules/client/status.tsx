@@ -5,8 +5,6 @@ type ClientStatusProps = {
 }
 
 export const ClientStatus = ({ status }: ClientStatusProps) => {
-  console.log('status', status);
-
   return (
     <div className={styles.status} data-status={status}></div>
   )

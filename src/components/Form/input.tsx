@@ -1,5 +1,6 @@
 import type { FieldError } from 'react-hook-form';
-import { InputHTMLAttributes, RefObject, useId } from 'react';
+import type { InputHTMLAttributes, RefObject } from 'react';
+import { useId } from 'react';
 import { forwardRef } from 'react';
 
 import styles from './input.module.css';
@@ -28,7 +29,7 @@ const Input = forwardRef(({ type = 'text', help, label, name, error, ...props }:
         type={type}
         name={name}
         {...props}
-        className={`${styles.item} ${props.className || ''}`}
+        className={`${styles.item} ${props.className ?? ''}`}
       />
       {!!error && <div className="block text-red-600 mt-2">{error.message}</div>}
     </div>

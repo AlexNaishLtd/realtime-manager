@@ -7,8 +7,8 @@ import { ClientStatus } from '@/modules/client/status';
 
 type MessageEvent = {
   id: string;
-  data: any;
-  style: any
+  data: string;
+  style: Record<string, string | number>
 }
 
 export default function Client() {
@@ -24,12 +24,11 @@ export default function Client() {
 
   useEffect(() => {
     if (!isReady) return;
-    const client = makeClient('RJnks0-bU68JjyzIXM02K')
+    const client = makeClient('test')
+
     const channel = query?.channel as string || 'default';
     client.subscribe(channel)
       .bind('reaction', (eventData: string) => {
-        console.log('eventData', eventData);
-
         setStats((current) => {
           if (eventData === 'love') {
             return {
@@ -71,7 +70,7 @@ export default function Client() {
       setStatus(state.current)
     });
     client.bind_global(console.log);
-    client.connection.bind("error", (err: any) => {
+    client.connection.bind("error", (err: unknown) => {
       console.log('err', err);
     });
     return () => {
@@ -100,7 +99,7 @@ export default function Client() {
         return (
           <ClientReaction key={message.id} style={{
             left: message.style.left,
-            '--size': message.style.size
+            '--size': message.style.size as number
           }} type={message.data} />
         )
       })}

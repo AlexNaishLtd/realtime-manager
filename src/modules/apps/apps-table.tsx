@@ -41,7 +41,7 @@ const columns: Column[] = [
 ]
 
 export const ApplicationsTable = ({ items, loading }: ApplicationsTableProps) => {
-  const onCopy = async () => {
+  const onCopy = () => {
     success('Value copied to clipboard');
   };
 
@@ -55,25 +55,25 @@ export const ApplicationsTable = ({ items, loading }: ApplicationsTableProps) =>
       {
         items?.map(app => {
           return (
-            <Row key={app.id}>
+            <Row key={app.AppId}>
               <Cell>
-                <Link href={`/application/${app.id}`} className="underline decoration-dotted whitespace-nowrap">{app.id}</Link>
+                <Link href={`/application/${app.AppId}`} className="block underline decoration-dotted truncate max-w-[120px]">{app.AppId}</Link>
               </Cell>
-              <Cell>{app.name}</Cell>
+              <Cell>{app.AppName}</Cell>
               <Cell>
                 <CopyButton
-                  text={app.key}
-                  value={app.key}
+                  text={app.AppKey}
+                  value={app.AppKey}
                   onCopy={onCopy} />
               </Cell>
               <Cell>
                 <CopyButton
-                  text={app.secret}
-                  value={app.secret}
+                  text={app.AppSecret}
+                  value={app.AppSecret}
                   onCopy={onCopy} />
               </Cell>
               <Cell>
-                <SwitchGroup value={app.enabled} />
+                <SwitchGroup value={Boolean(app.Enabled)} />
               </Cell>
               <Cell isActions>
                 <div className="flex items-center justify-center">

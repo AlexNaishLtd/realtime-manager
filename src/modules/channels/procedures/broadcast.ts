@@ -12,17 +12,8 @@ export const broadcast = t.procedure
     })
   )
   .mutation(async ({ ctx, input }) => {
-    const app = await ctx.db.apps.findUniqueOrThrow({
-      where: {
-        id: input.applicationId
-      },
-      select: {
-        id: true,
-        key: true,
-        secret: true
-      }
-    });
+    const app = await ctx.db.application.get(input.applicationId);
 
-    const client = makeClient({ appId: app.id, key: app.key, secret: app.secret });
+    const client = makeClient({ appId: app.AppId, key: app.AppKey, secret: app.AppSecret });
     await client.trigger(input.channelName, input.eventName, input.eventData);
   });

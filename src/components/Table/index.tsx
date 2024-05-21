@@ -22,7 +22,7 @@ export const Table = ({ columns, loading, compact, children }: TableProps) => {
           <tr>
             {columns?.map((col, i) => (
               <th
-                key={`${col}-${i}`}
+                key={`${col.value?.toLocaleString()}-${i}`}
                 scope="col"
                 className={`${styles.heading} ${col.class}`}
               >
@@ -70,7 +70,7 @@ type CellProps = {
 
 export const Cell = ({ colSpan, className, isActions, children }: CellProps) => {
   return (
-    <td className={[styles.cell, `${isActions && styles.actions}`, className].filter(Boolean).join(' ')} colSpan={colSpan}>
+    <td className={[styles.cell, `${isActions ? styles.actions : ''}`, className].filter(Boolean).join(' ')} colSpan={colSpan}>
       {children}
     </td>
   );

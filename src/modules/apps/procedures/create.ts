@@ -1,27 +1,26 @@
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import { t } from '@/server/trpc';
-import { nanoid } from 'nanoid'
 
 export const create = t.procedure
   .input(
     z.object({
       name: z.string(),
-      enabled: z.coerce.number()
+      enabled: z.boolean()
     })
   )
   .mutation(async ({ ctx, input }) => {
-    return ctx.db.apps.create({
-      data: {
-        name: input.name,
-        key: nanoid(),
-        secret: nanoid(),
-        max_connections: -1,
-        max_backend_events_per_sec: -1,
-        max_client_events_per_sec: -1,
-        max_read_req_per_sec: -1,
-        enabled: input.enabled,
-        enable_user_authentication: 0,
-        enable_client_messages: 0
-      }
+    return ctx.db.application.create({
+      AppId: nanoid(32),
+      AppName: input.name,
+      AppKey: nanoid(),
+      AppSecret: nanoid(),
+      MaxConnections: -1,
+      MaxBackendEventsPerSecond: -1,
+      MaxClientEventsPerSecond: -1,
+      MaxReadRequestsPerSecond: -1,
+      Enabled: input.enabled,
+      EnableUserAuthentication: false,
+      EnableClientMessages: false
     })
   });

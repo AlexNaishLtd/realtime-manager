@@ -12,28 +12,29 @@ const AppPage = () => {
   const appQuery = trpc.apps.fetch.useQuery(applicationId, { enabled: !!applicationId });
   const channelsQuery = trpc.apps.getChannels.useQuery(applicationId, {
     enabled: !!applicationId,
-    refetchInterval: 5000
+    refetchInterval: 20000
   });
 
   useEffect(() => {
     if (!channelsQuery.data) return;
-
     setTotalUsers(
-      channelsQuery.data.reduce((acc, item) => acc + item.users, 0)
+      channelsQuery.data.reduce<number>((acc, item) => {
+        return acc + item.users;
+      }, 0)
     );
-
   }, [channelsQuery.data, setTotalUsers]);
+
+  const pageTitle = `${appQuery.data?.AppName || ''} Application | Realtime Manager`;
 
   return (
     <Layout>
       <Head>
-        <title>{appQuery.data?.name} Application | Realtime Manager</title>
+        <title>{pageTitle}</title>
       </Head>
-      <h1 className="mt-10 text-lg font-medium">{appQuery.data?.name} Application</h1>
+      <h1 className="mt-10 text-lg font-medium">{appQuery.data?.AppName} Application</h1>
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12 mt-2 lg:col-span-8">
           Application Details
-
         </div>
         <div className="col-span-12 mt-2 sm:col-span-6 lg:col-span-4">
           Total Users: {totalUsers}

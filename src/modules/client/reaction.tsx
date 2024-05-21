@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import styles from './client.module.css';
 
 export interface CustomCSS extends CSSProperties {

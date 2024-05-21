@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import styles from './tooltip.module.css';
 
@@ -28,7 +29,7 @@ const Tooltip = ({ content, children, useMouseInteractions = true, active, full,
     <div className={styles.wrap} data-full={full} onMouseOver={onMouseOver} onMouseLeave={onMouseOut}>
       {children}
       {isActive && (
-        <div className={styles.content} data-direction={direction || 'top'}>
+        <div className={styles.content} data-direction={direction ?? 'top'}>
           {content}
         </div>
       )}

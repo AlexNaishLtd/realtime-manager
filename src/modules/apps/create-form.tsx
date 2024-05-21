@@ -9,7 +9,7 @@ import { SwitchInput } from '@/components/Form/switch';
 
 type CreateAppPayload = RouterInputs['apps']['create'];
 type CreateAppFormProps = {
-  onSubmit: (val: CreateAppPayload) => void;
+  onSubmit: (val: CreateAppPayload) => Promise<void>;
 };
 
 export const CreateAppForm = ({ onSubmit }: CreateAppFormProps) => {
@@ -25,7 +25,7 @@ export const CreateAppForm = ({ onSubmit }: CreateAppFormProps) => {
     }
   });
 
-  const submit = async (values: any) => {
+  const submit = async (values: CreateAppPayload) => {
     try {
       setError('');
       await onSubmit(values);
@@ -42,8 +42,8 @@ export const CreateAppForm = ({ onSubmit }: CreateAppFormProps) => {
         description={error}
       />}
       <Input
-        label="User Email"
-        placeholder="joe@example.com"
+        label="Name"
+        placeholder="My Realtime App"
         error={errors?.name}
         {...register('name', {
           required: 'An application name is required.',

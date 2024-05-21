@@ -1,16 +1,20 @@
 import { Switch } from "@headlessui/react";
-
-import styles from './switch.module.css';
+import type { Control, FieldValues, Path, PathValue } from "react-hook-form";
 import { Controller } from "react-hook-form";
 
-type SwitchInputProps = {
-  name: string;
+import styles from './switch.module.css';
+
+type SwitchInputProps<T extends FieldValues> = {
+  name: Path<T>;
+  value?: boolean;
+  defaultValue?: PathValue<T, Path<T>>;
+  onChange?: (val: boolean) => void;
   label?: string;
   labelWidth?: string;
-  [key: string]: any;
+  control?: Control<T>;
 };
 
-export const SwitchGroup = ({ value, onChange, label, labelWidth, ...props }: Omit<SwitchInputProps, 'name'>) => {
+export const SwitchGroup = <T extends FieldValues>({ value, onChange, label, labelWidth, ...props }: Omit<SwitchInputProps<T>, 'name'>) => {
   return (
     <Switch.Group as="div" className="flex space-x-4">
       {label && <Switch.Label style={{ minWidth: labelWidth }}>{label}</Switch.Label>}
@@ -21,15 +25,15 @@ export const SwitchGroup = ({ value, onChange, label, labelWidth, ...props }: Om
   );
 };
 
-export const SwitchInput = ({ name, control, label, labelWidth, ...props }: SwitchInputProps) => {
+export const SwitchInput = <T extends FieldValues>({ name, control, label, labelWidth, ...props }: SwitchInputProps<T>) => {
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue=""
+      // defaultValue=""
       {...props}
       render={({ field }) => {
-        return <SwitchGroup value={field.value} onChange={field.onChange} label={label} labelWidth={labelWidth} {...props} />;
+        return <SwitchGroup {...props} value={field.value} onChange={field.onChange} label={label} labelWidth={labelWidth} />;
       }}
     />
   );

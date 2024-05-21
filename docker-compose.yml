@@ -1,46 +1,36 @@
 version: "3"
 services:
-  db:
-    image: postgres:16.0-alpine
-    restart: always
-    environment:
-      - POSTGRES_USER=rtm_user
-      - POSTGRES_PASSWORD=rand0mp4ssw0rd
-      - POSTGRES_DB=rtm
-    ports:
-      - "5435:5432"
-    volumes:
-      - ./data:/var/lib/postgresql/data
-    networks:
-      - rtm
+  # app:
+  #   restart: always
+  #   ports:
+  #     - "8080:3000"
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - .env
+  #   environment:
+  #   depends_on:
+  #     - db
+  #     - soketi
+  #   networks:
+  #     - rtm
   soketi:
-    image: "quay.io/soketi/soketi:latest-16-alpine"
+    image: "quay.io/soketi/soketi:1.6-16-distroless"
+    restart: always
+    network_mode: "host"
+    env_file:
+      - .env
     environment:
       SOKETI_DEBUG: "0"
       SOKETI_METRICS_ENABLED: "true"
       SOKETI_METRICS_PROMETHEUS_PREFIX: "rtm_"
       SOKETI_METRICS_SERVER_PORT: "9601"
-      SOKETI_APP_MANAGER_DRIVER: "postgres"
+      SOKETI_APP_MANAGER_DRIVER: "dynamodb"
       SOKETI_APP_MANAGER_CACHE_ENABLED: "true"
-      SOKETI_APP_MANAGER_CACHE_TTL: 15
-      SOKETI_DB_POSTGRES_HOST: "db"
-      SOKETI_DB_POSTGRES_PORT: "5432"
-      SOKETI_DB_POSTGRES_USERNAME: "postgres"
-      SOKETI_DB_POSTGRES_PASSWORD: "postgres"
-      SOKETI_DB_POSTGRES_DATABASE: "rtm"
-      SOKETI_DB_POOLING_ENABLED: "true"
+      SOKETI_APP_MANAGER_CACHE_TTL: 120
+      SOKETI_APP_MANAGER_DYNAMODB_TABLE: "realtime_apps"
+      SOKETI_APP_MANAGER_DYNAMODB_REGION: "eu-west-2"
     ports:
       - "80:6001"
       - "${SOKETI_METRICS_SERVER_PORT:-9601}:9601"
-    depends_on:
-      - db
-    networks:
-      - rtm
-
-volumes:
-  db:
-    driver: local
-
-networks:
-  rtm:
-    driver: bridge

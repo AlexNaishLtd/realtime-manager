@@ -1,4 +1,5 @@
 import Pusher from 'pusher';
+import { env } from '@/env.mjs';
 
 type ServerClientProps = {
   appId: string;
@@ -11,6 +12,8 @@ export const makeClient = ({ appId, key, secret }: ServerClientProps) => {
     appId,
     key,
     secret,
-    host: process.env.SOKETI_HOST as string
+    useTLS: true,
+    host: `${env.SOKETI_HOST}${env.SOKETI_PATH}`,
+    timeout: 4000,
   });
 }

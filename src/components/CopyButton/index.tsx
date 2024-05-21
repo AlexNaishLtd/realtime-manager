@@ -12,8 +12,8 @@ type CopyButtonProps = {
 
 export const CopyButton = ({ label = 'Copy', onCopy, text, value }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
-  const handleCopy = useCallback(async () => {
-    await onCopy?.();
+  const handleCopy = useCallback(() => {
+    onCopy?.();
     setCopied(true);
     setTimeout(() => {
       setCopied(false);

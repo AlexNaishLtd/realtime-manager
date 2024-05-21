@@ -20,6 +20,7 @@ next-env.d.ts
 # production
 /build
 .env
+cdk.out
 
 # misc
 .DS_Store

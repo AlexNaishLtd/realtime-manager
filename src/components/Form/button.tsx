@@ -10,7 +10,7 @@ type ButtonProps = {
 
 export const Button = ({ children, type = 'submit', disabled, isPending, ...props }: ButtonProps) => {
   return (
-    <button {...props} type={type} disabled={disabled || isPending} className={styles.wrap}>
+    <button {...props} type={type} disabled={disabled ?? isPending} className={styles.wrap}>
       {children}
       {isPending && (
         <svg width="25" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-8 ml-2">
